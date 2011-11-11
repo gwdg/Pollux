@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+		xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>juvi.cloud</groupId>
+		<artifactId>cloud.parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>juvi.cloud</groupId>
+	<artifactId>cloud.web</artifactId>
+	<name>cloud.web</name>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.services</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>org.springframework.spring-library</artifactId>
+			<type>libd</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>com.springsource.freemarker</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId> 
+			<artifactId>com.springsource.org.apache.commons.fileupload</artifactId> 
+			<version>1.2.1</version> 
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>com.springsource.org.apache.commons.io</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+	<plugins>
+		<plugin>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>2.1-beta-1</version>
+			<configuration>
+				<packagingExcludes>WEB-INF/lib/**</packagingExcludes>
+			</configuration>
+		</plugin>
+	</plugins>
+	</build>
+
+</project>

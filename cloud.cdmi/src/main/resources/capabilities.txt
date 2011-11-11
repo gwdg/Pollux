@@ -1,0 +1,24 @@
+{
+    "objectURI" : "/cdmi_capabilities/",
+    "objectID" : "AAAAFAAo7EFMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCBhbWV0Lg==",
+    "parentURI" : "/",
+    "capabilities" : {
+        "cdmi_domains" : "true",
+        "cdmi_export_nfs" : "true",
+        "cdmi_export_webdav" : "true",
+        "cdmi_export_iscsi" : "true",
+        "cdmi_queues" : "true",
+        "cdmi_notification" : "true",
+        "cdmi_query" : "true",
+        "cdmi_xmlrepresentation" : "true",
+        "cdmi_metadata_maxsize" : "4096",
+        "cdmi_metadata_maxitems" : "1024" 
+    },
+    "childrenrange" : "0-3",
+    "children" : [
+        "domain/",
+        "container/",
+        "dataobject/",
+        "queue/" 
+    ]
+}

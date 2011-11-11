@@ -1,0 +1,9 @@
+{
+    "nfs" : {
+        "protocol" : "NFSv3",
+        "exportpath" : "ls36:/home/nfs/exported/directory",
+        "exportdomain" : ".",
+        "mode" : "rw",
+        "control" : "off"
+    }
+}

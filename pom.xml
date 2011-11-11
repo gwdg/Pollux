@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+		xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>juvi.cloud</groupId>
+	<artifactId>cloud-toplevel</artifactId>
+	<version>1.0</version>
+    <name>Cloud App Build</name>
+	<packaging>pom</packaging>
+	
+	<modules>
+		<module>parent</module>
+		<module>cloud</module>
+		<module>cloud.cdmi</module>
+		<module>cloud.one.occi</module>
+		<module>cloud.services</module>
+		<module>cloud.web</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.9.0</version>
+				<configuration>
+					<header>license/license.txt</header>
+					<failIfMissing>true</failIfMissing>
+					<strictCheck>true</strictCheck>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,22 @@
+{
+    "objectURI" : "/MyContainer/MyDataObject.txt",
+    "objectID" : "AABwbQAQb/ENV52Ai8a3MA==",
+    "parentURI" : "/MyContainer/",
+    "domainURI" : "/cdmi_domains/MyDomain/",
+    "capabilitiesURI" : "/cdmi_capabilities/DataObject/",
+    "percentComplete" : "Complete",
+    "mimetype" : "text/plain",
+    "metadata" : {
+        "cdmi_nfs_export" : "true",
+        "cdmi_size" : "17",
+        "ACL" : {
+            "acetype" : "0x00",
+            "identifier" : "EVERYONE@",
+            "aceflags" : "0x00",
+            "acemask" : "0x00020089",
+            "acetime" : 12345678 
+        } 
+    },
+    "valuerange" : "0-17",
+    "value" : "Hello CDMI World!" 
+}

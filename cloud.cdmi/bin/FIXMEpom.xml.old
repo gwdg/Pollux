@@ -1,0 +1,178 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+	                    http://maven.apache.org/maven-v4_0_0.xsd ">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>de.tu-dortmund.itmc</groupId>
+		<artifactId>one-extensions</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	
+	<groupId>de.tu-dortmund.itmc</groupId>
+	<artifactId>one-cdmi</artifactId>
+	<packaging>bundle</packaging>
+	<name>one-cdmi</name>
+	<version>1.0-SNAPSHOT</version>
+	
+	<properties>
+		<one.cdmi.export>de.udo.*</one.cdmi.export>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>3.8.1</version>
+		  <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>2.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
+			<version>2.2.1.GA</version>
+		</dependency>
+		
+		<dependency>
+		   <groupId>org.datanucleus</groupId>
+		   <artifactId>datanucleus-json</artifactId>
+		   <version>2.1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>jcommon</groupId>
+			<artifactId>jcommon</artifactId>
+			<version>1.0.16</version>
+		</dependency>        
+        
+		<dependency>
+			<groupId>jsci</groupId>
+			<artifactId>jsci-core</artifactId>
+			<version>1.1</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6</version>
+        </dependency>
+        
+	<!-- DEPENDENCIES of SPRING & OSGi -->
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-annotation</artifactId>
+            <version>1.2.0</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-core</artifactId>
+            <version>1.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>2.5.6</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>${felix-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+		
+        <!-- END -->
+ 		
+		
+  </dependencies>
+  
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				 <includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/gui</directory>
+				 <includes>
+					<include>**/*.png</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+  
+  <profiles>
+		<profile>
+			<id>activator</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- enable bundlor -->
+				<bundlor.enabled>true</bundlor.enabled>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>    <!-- (2) START -->
+						<groupId>org.apache.felix</groupId>
+						<artifactId>maven-bundle-plugin</artifactId>
+						<version>${felix-version}</version>
+						<extensions>true</extensions>
+						<configuration>
+							<instructions>
+							    <Bundle-Name>one-cdmi</Bundle-Name>
+								<Bundle-SymbolicName>one-cdmi</Bundle-SymbolicName>
+								<Import-Package>
+									org.apache.log4j;resolution:=optional,
+									org.apache.commons.io;resolution:=optional;version:=2.0
+								</Import-Package>
+								<Export-Package>${one.cdmi.export};version="${project.version}"</Export-Package>
+                              <Embed-Dependency>jsci-core;inline=false;joda-time;inline=false</Embed-Dependency>
+							</instructions>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

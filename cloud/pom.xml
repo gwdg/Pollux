@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+		xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>juvi.cloud</groupId>
+		<artifactId>cloud.parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>juvi.cloud</groupId>
+	<artifactId>cloud.par</artifactId>
+	<version>1.0</version>
+	<name>Cloud PAR</name>
+	<description>Cloud PAR</description>
+	<packaging>par</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.cdmi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.one.occi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.web</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<!-- Required for the web bundle as dependencies are not propagated up from war build types -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>com.springsource.freemarker</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-par-plugin</artifactId>
+				<version>1.0.0.RELEASE</version>
+				<configuration>
+					<applicationSymbolicName>cloud</applicationSymbolicName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/par-provided</outputDirectory>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeGroupIds>juvi.cloud,org.apache.log4j</excludeGroupIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

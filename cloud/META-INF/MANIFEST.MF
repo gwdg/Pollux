@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Application-SymbolicName: cloud
+Application-Version: 1.0
+Application-Name: Cloud PAR
+

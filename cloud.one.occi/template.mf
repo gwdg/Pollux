@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cloud ONE.OCCI
+Bundle-SymbolicName: cloud.one.occi
+Bundle-Vendor: TU-Dortmund  Miguel Rojas
+Bundle-Version: 1.0
+Import-Template: 
+ org.springframework.*;version="[3.0, 3.1)",
+ cloud.services.*;version="[1.0, 2.0)",
+ org.apache.commons.io;version="[2.0, 3.0)",
+ org.apache.http.*;version="[3.0, 5.0)",
+ org.apache.commons.httpclient.*;version="[3.1.0, 3.2)",
+ net.sf.json.*;version="[2.0, 2.3)",
+Excluded-Exports: 
+ cloud.one.occi.internal

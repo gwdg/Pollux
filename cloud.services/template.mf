@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cloud Services
+Bundle-SymbolicName: cloud.services
+Bundle-Vendor: TU-Dortmund  Miguel Rojas
+Bundle-Version: 1.0
+Import-Template: 
+ org.springframework.*;version="[3.0, 3.1)"
+Excluded-Exports: 
+ cloud.services.internal

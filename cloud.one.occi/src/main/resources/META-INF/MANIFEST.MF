@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Vendor: Miguel Rojas
+Bundle-Version: 1.0
+Tool: Bundlor 1.0.0.RELEASE
+Bundle-Name: Cloud ONE OCCI
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: cloud.one.occi
+Export-Package: cloud.one.occi;version="1.0"
+Import-Package: org.springframework.stereotype;version="[3.0, 3.1)"
+

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Vendor: TU-Dortmund  Miguel Rojas
+Bundle-Version: 1.0
+Tool: Bundlor 1.0.0.RELEASE
+Bundle-Name: Cloud Services
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: cloud.services
+Export-Package: cloud.services;version="1.0"
+Import-Package: org.springframework.stereotype;version="[3.0, 3.1)"
+
