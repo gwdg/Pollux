@@ -355,9 +355,12 @@ public class RestfulUtils
                 put.setRequestHeader( k, headers.get( k ) );
             }
 
-            FileInputStream fis = new FileInputStream( body );
-            InputStreamRequestEntity is = new InputStreamRequestEntity( fis );
+            /* OutofMemory Exception :: HttpClient
+            FileInputStream fis = new FileInputStream( body ); 
+            InputStreamRequestEntity is = new InputStreamRequestEntity( fis ); 
             put.setRequestEntity( is );
+            */
+            put.setRequestEntity( new ImageRequestEntity( body ) );
 
             HttpClient client = new HttpClient();
             result.code = client.executeMethod( put );

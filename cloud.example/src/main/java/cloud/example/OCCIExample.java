@@ -11,9 +11,9 @@ import cloud.services.one.occi.IOCCIOneManager;
  * @author Miguel Rojas (email.miguel.rojas@googlemail.com)
  *
  */
-public class IExample 
+public class OCCIExample 
 {
-    public IExample()
+    public OCCIExample()
     {
         init();
     }
@@ -75,7 +75,7 @@ public class IExample
     
     public static void main( String[] args )
     {
-        IExample ex = new IExample();
+        OCCIExample ex = new OCCIExample();
         ex.createVM();
     }
     
