@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+		xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>juvi.cloud</groupId>
+		<artifactId>cloud.parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>juvi.cloud</groupId>
+	<artifactId>cloud.example</artifactId>
+	<name>cloud.example</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>org.springframework.spring-library</artifactId>
+			<type>libd</type>
+		</dependency>
+		<dependency>
+			<groupId>org.junit</groupId>
+			<artifactId>com.springsource.org.junit</artifactId>
+		</dependency>
+		
+		<!-- CDMI & OCCI Library dependencies -->
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.one.occi</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>juvi.cloud</groupId>
+			<artifactId>cloud.cdmi</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+</project>
