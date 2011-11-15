@@ -62,7 +62,11 @@ public class IElementDecorator
     
     public String[] getCaption()
     {
-        return new String[]{ caption[ 1 ], decorated.attributes.get( caption[ 0 ] ) };
+        String cpt = decorated.attributes.get( caption[ 0 ] );
+        if ( cpt == null ) cpt = "not available";
+        String[] result = new String[]{ caption[ 1 ], cpt };
+        
+        return result;
     }
     
     public String[][] getValues()

@@ -235,6 +235,7 @@
 				  		    <#assign element    = compute.element>
 				  		    <#assign caption    = compute.caption>
 				  		    <#assign attributes = compute.values>
+				  		    <#assign links      = compute.element.links>
 				  			<h3><a href="#">${caption[ 1 ]}&nbsp;</a></h3>
 							<div>
 								<p>
@@ -245,6 +246,20 @@
 										  <td width="70%">${attr[ 1 ]}</td>
 										</tr>
 									</#list>
+					  			  </table>
+								  <table width="340" border="0">
+								    <#if links?? && (links?size > 0) >
+										<tr class="iattribute">
+										  <td align="right" width="30%"><b>Links:</b></td>
+										  <td width="70%">&nbsp;</td>
+										</tr>
+								  		<#list links as lk>
+											<tr class="iattribute">
+											  <td align="right" width="30%">&nbsp;</td>
+											  <td width="70%" nowrap="nowrap">${lk}</td>
+											</tr>
+										</#list>
+									</#if>
 					  			  </table>
   								  <br>
 								  <table width="300" border="0">

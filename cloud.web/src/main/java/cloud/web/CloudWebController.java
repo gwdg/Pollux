@@ -979,9 +979,7 @@ public class CloudWebController
                                                 { "occi.compute.cores"         , "Cores"        },
                                                 { "occi.compute.memory"        , "Memory"       },
                                                 { "occi.core.id"               , "ID"           },
-                                                { "occi.compute.state"         , "State"        },
-                                                { "occi.infrastructure.network", "Network"      },
-                                                { "occi.infrastructure.storage", "Storage"      }
+                                                { "occi.compute.state"         , "State"        }
                                             } );
                 }
                 
