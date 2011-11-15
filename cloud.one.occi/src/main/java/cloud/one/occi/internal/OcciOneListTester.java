@@ -115,8 +115,8 @@ public class OcciOneListTester
     
     public static void main( String[] args )
     {
-        //networkTest();
+        networkTest();
         //storageTest();
-        computeTest();
+        //computeTest();
     }
 }

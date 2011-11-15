@@ -365,8 +365,7 @@ public class OcciOneManagerImpl implements IOCCIOneManager
         {
             Hashtable<String, String> headers = new Hashtable<String, String>();
             headers.put( "Accept", "*/*" );
-            headers.put( "Category", "network;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";," +
-                                     "ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"kind\";" );
+            headers.put( "Category", "network;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";" );
             
             String URI = uri + "/network/";
             OcciResponse response = HttpUtils.get( URI, 
