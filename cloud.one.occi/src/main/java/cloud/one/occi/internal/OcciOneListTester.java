@@ -47,7 +47,14 @@ public class OcciOneListTester
         {
             System.out.println( "--  GETTING ALL NETWORKs ------------------" );
             OcciOneManagerImpl occi = new OcciOneManagerImpl();
-            INetwork[] networks = occi.getNetworks( "http://129.217.211.147:3000" );
+            //INetwork[] networks = occi.getNetworks( "http://129.217.211.147:3000" );
+            INetwork[] networks = occi.getNetworks( "http://www.nyren.net/api" );
+            
+            if ( networks == null || networks.length == 0 )
+            {
+                System.out.println( "No storages available" );
+                return;
+            }
             
             for ( INetwork net : networks )
             {
@@ -66,7 +73,14 @@ public class OcciOneListTester
         {
             System.out.println( "--  GETTING ALL STORAGEs ------------------" );
             OcciOneManagerImpl occi = new OcciOneManagerImpl();
-            IStorage[] storages = occi.getStorages( "http://129.217.211.147:3000" );
+            //IStorage[] storages = occi.getStorages( "http://129.217.211.147:3000" );
+            IStorage[] storages = occi.getStorages( "http://www.nyren.net/api" );
+            
+            if ( storages == null || storages.length == 0 )
+            {
+                System.out.println( "No storages available" );
+                return;
+            }
             
             for ( IStorage stg : storages )
             {
@@ -85,7 +99,8 @@ public class OcciOneListTester
         {
             System.out.println( "--  GETTING ALL COMPUTEs ------------------" );
             OcciOneManagerImpl occi = new OcciOneManagerImpl();
-            ICompute[] compute = occi.getComputes( "http://129.217.211.147:3000" );
+            //ICompute[] compute = occi.getComputes( "http://129.217.211.147:3000" );
+            ICompute[] compute = occi.getComputes( "http://www.nyren.net/api" );
             
             for ( ICompute cmp : compute )
             {
@@ -100,8 +115,8 @@ public class OcciOneListTester
     
     public static void main( String[] args )
     {
-        networkTest();
-        storageTest();
+        //networkTest();
+        //storageTest();
         computeTest();
     }
 }

@@ -523,27 +523,11 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                                 
                                 result[ i ].getAttributes().put( tokens[ 0 ], tokens[ 1 ] );
                             }
-                            else if ( attr.startsWith( "Link" ) )
+                            else if ( attr.startsWith( "Link" ) ) // Format[  Link: </api/compute/ea97ad10-8272-4df3-a9dc-484b0aa75902?action=start>; ... ]
                             {
-                                String[] tokens = new String[ 2 ];
+                                String linkCnt = attr.substring( attr.indexOf( "<" )+1, attr.indexOf( ">" ) );
                                 
-                                if ( attr.contains( "/network/" ) )
-                                {
-                                    tokens[ 0 ] = "occi.infrastructure.network";
-                                    tokens[ 1 ] = attr.substring( 17, attr.indexOf( ">" ) );
-                                }
-                                else if ( attr.contains( "/storage/" ) ) // OCCI ?
-                                {
-                                    tokens[ 0 ] = "occi.infrastructure.storage";
-                                    tokens[ 1 ] = attr.substring( 17, attr.indexOf( ">" ) );
-                                }
-                                else if ( attr.contains( "infrastructure#storagelink" ) ) // CDMI ?
-                                {
-                                    tokens[ 0 ] = "occi.infrastructure.storage";
-                                    tokens[ 1 ] = attr.substring( 8, attr.indexOf( ">" ) );
-                                }
-                                
-                                result[ i ].getAttributes().put( tokens[ 0 ], tokens[ 1 ] );
+                                result[ i ].getLinks().add( linkCnt );
                             }
                         }
                     }
