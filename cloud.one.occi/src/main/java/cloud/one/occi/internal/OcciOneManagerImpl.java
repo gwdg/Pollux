@@ -382,33 +382,11 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                     result[ i ].getContent().put( INetwork.ID , networkURI       );
                     result[ i ].getContent().put( INetwork.URI, URI + networkURI );
                     
-                    // Details about this Storage
-                    OcciResponse inner = HttpUtils.get( URI + networkURI, headers );
-                    if ( inner != null && inner.content != null )
-                    {
-                        for ( String attr : inner.content )
-                        {
-                            if ( attr.contains( "-Attribute" ) )
-                            {
-                                String ATT = attr.substring( attr.indexOf( "Attribute" ) + 11 );
-                                String[] tokens = ATT.split( "=" );
-                                if ( tokens.length == 2 )
-                                {
-                                    result[ i ].getAttributes().put( tokens[ 0 ], tokens[ 1 ] );
-                                }
-                                else
-                                {
-                                    result[ i ].getAttributes().put( tokens[ 0 ], "" );
-                                }
-                            }
-                        }
-                        
-                        String caption = result[ i ].getAttributes().get( "occi.core.title" );
-                        if ( caption == null ) result[ i ].getAttributes().put( "occi.core.title", "title not available" );
-                    }
                     
                     i++;
                 }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchNetworkInformation( headers, result );
             }
         }
         catch ( Exception e )
@@ -443,33 +421,11 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                     result[ i ].getContent().put( IStorage.ID, storageURI        );
                     result[ i ].getContent().put( IStorage.URI, URI + storageURI );
                     
-                    // Details about this Storage
-                    OcciResponse inner = HttpUtils.get( URI + storageURI, headers );
-                    if ( inner != null && inner.content != null )
-                    {
-                        for ( String attr : inner.content )
-                        {
-                            if ( attr.contains( "-Attribute" ) )
-                            {
-                                String ATT = attr.substring( attr.indexOf( "Attribute" ) + 11 );
-                                String[] tokens = ATT.split( "=" );
-                                if ( tokens.length == 2 )
-                                {
-                                    result[ i ].getAttributes().put( tokens[ 0 ], tokens[ 1 ] );
-                                }
-                                else
-                                {
-                                    result[ i ].getAttributes().put( tokens[ 0 ], "" );
-                                }
-                            }
-                        }
-                        
-                        String caption = result[ i ].getAttributes().get( "occi.core.title" );
-                        if ( caption == null ) result[ i ].getAttributes().put( "occi.core.title", "title not available" );
-                    }
-                    
                     i++;
                 }
+                
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchStorageInformation( headers, result );
             }
         }
         catch ( Exception e )

@@ -51,7 +51,8 @@ public class OcciExecutorCompletionService
             INetwork r = ecs.take().get();
             if ( r != null )
             { 
-                // consume Net ( r )
+                String caption = r.getAttributes().get( "occi.core.title" );
+                if ( caption == null ) r.getAttributes().put( "occi.core.title", "title not available" );
             }
         }
     }
@@ -90,7 +91,8 @@ public class OcciExecutorCompletionService
             IStorage r = ecs.take().get();
             if ( r != null )
             { 
-                // consume Storage ( r )
+                String caption = r.getAttributes().get( "occi.core.title" );
+                if ( caption == null ) r.getAttributes().put( "occi.core.title", "title not available" );
             }
         }
     }
@@ -129,7 +131,8 @@ public class OcciExecutorCompletionService
             ICompute r = ecs.take().get();
             if ( r != null )
             { 
-                // consume VM ( r )
+                String caption = r.getAttributes().get( "occi.core.title" );
+                if ( caption == null ) r.getAttributes().put( "occi.core.title", "title not available" );
             }
         }
     }
