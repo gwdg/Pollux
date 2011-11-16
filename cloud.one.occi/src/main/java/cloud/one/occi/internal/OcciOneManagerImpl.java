@@ -402,6 +402,9 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                                 }
                             }
                         }
+                        
+                        String caption = result[ i ].getAttributes().get( "occi.core.title" );
+                        if ( caption == null ) result[ i ].getAttributes().put( "occi.core.title", "title not available" );
                     }
                     
                     i++;
@@ -460,6 +463,9 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                                 }
                             }
                         }
+                        
+                        String caption = result[ i ].getAttributes().get( "occi.core.title" );
+                        if ( caption == null ) result[ i ].getAttributes().put( "occi.core.title", "title not available" );
                     }
                     
                     i++;
