@@ -102,6 +102,7 @@ public class OcciOneListTester
             //ICompute[] compute = occi.getComputes( "http://129.217.211.147:3000" );
             ICompute[] compute = occi.getComputes( "http://www.nyren.net/api" );
             
+            System.out.println( "Computers found:"+compute.length );
             for ( ICompute cmp : compute )
             {
                 System.out.println( cmp );
@@ -115,8 +116,8 @@ public class OcciOneListTester
     
     public static void main( String[] args )
     {
-        networkTest();
+        //networkTest();
         //storageTest();
-        //computeTest();
+        computeTest();
     }
 }

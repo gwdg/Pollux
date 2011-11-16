@@ -498,41 +498,10 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                     result[ i ].getContent().put( ICompute.ID, computeURI        );
                     result[ i ].getContent().put( ICompute.URI, URI + computeURI );
                     
-                    // Details about this Compute
-                    OcciResponse inner = HttpUtils.get( URI + computeURI, headers );
-                    if ( inner != null && inner.content != null )
-                    {
-                        for ( String attr : inner.content )
-                        {
-                            if ( attr.contains( "-Attribute" ) )
-                            {
-                                String ATT = attr.substring( attr.indexOf( "Attribute" ) + 11 );
-                                String[] tokens = ATT.split( "=" );
-                                
-                                if ( tokens.length >= 2 )
-                                {
-                                    //remove extra """
-                                    tokens[ 0 ] = ATT.substring( 0, ATT.indexOf( "=" ) ).replace( "\"", "" );
-                                    tokens[ 1 ] = ATT.substring( ATT.indexOf( "=" )+1 ).replace( "\"", "" );
-                                }
-                                else if ( tokens.length == 1 )
-                                {
-                                    tokens = new String[]{ tokens[ 0 ].replace( "\"", "" ), "" };
-                                }
-                                
-                                result[ i ].getAttributes().put( tokens[ 0 ], tokens[ 1 ] );
-                            }
-                            else if ( attr.startsWith( "Link" ) ) // Format[  Link: </api/compute/ea97ad10-8272-4df3-a9dc-484b0aa75902?action=start>; ... ]
-                            {
-                                String linkCnt = attr.substring( attr.indexOf( "<" )+1, attr.indexOf( ">" ) );
-                                
-                                result[ i ].getLinks().add( linkCnt );
-                            }
-                        }
-                    }
-                    
                     i++;
                 }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchVmInformation( headers, result );
             }
         }
         catch ( Exception e )
