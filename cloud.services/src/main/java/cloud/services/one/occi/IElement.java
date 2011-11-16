@@ -43,8 +43,11 @@ public class IElement
 {
     public HashMap<String, String> content    = new HashMap<String, String>();
     public HashMap<String, String> attributes = new HashMap<String, String>();
+    public ArrayList<String>       links      = new ArrayList<String>();
+    
     public HashMap<String, String> getContent   (){ return content   ; }
     public HashMap<String, String> getAttributes(){ return attributes; }
+    public ArrayList<String>       getLinks     (){ return links     ; }
     
     public ArrayList<String> getAttrKeys()
     {
@@ -58,6 +61,6 @@ public class IElement
     
     public String toString()
     {
-        return String.format( "content=%s; attributes=%s", content.toString(), attributes.toString() );
+        return String.format( "content=%s; attributes=%s; links=%s", content.toString(), attributes.toString(), links.toString() );
     }
 }
