@@ -300,6 +300,9 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             String networkSet = data.getContent().get( ICompute.NETWORK );
             String storageSet = data.getContent().get( ICompute.STORAGE );
             
+            INetwork[] networkArray = getNetworkArray( networkSet );
+            IStorage[] storageArray = getStorageArray( storageSet );
+            
             String storageID = "";  // TODO:  tobe initialized 
             if ( storageID.startsWith( "http://" ) ) // it's a CDMI storage
             {
@@ -547,10 +550,104 @@ public class OcciOneManagerImpl implements IOCCIOneManager
         return result; 
     }
     
+    protected INetwork[] getNetworkArray( String networkSet )
+    {
+        try
+        {
+            String separator = "_NET_";
+            String[] elements = networkSet.split( separator );
+            INetwork[] result = new INetwork[ elements.length ];
+            for ( int i = 0; i < elements.length; i++ )
+            {
+                // example:  TestNetwork(627ba25a-09e8-11e1-997c-00163e211147);MAC=MACx;IP=IPx;Gateway=GWx;Allocation=ALLOx;
+                
+                result[ i ]       = new INetwork();
+                String Name       = attr( elements[ i ], null         );
+                String IP         = attr( elements[ i ], "IP"         );
+                String MAC        = attr( elements[ i ], "MAC"        );
+                String Gateway    = attr( elements[ i ], "Gateway"    );
+                String Allocation = attr( elements[ i ], "Allocation" );
+                
+                if ( Name != null )
+                    result[ i ].getAttributes().put( INetwork.TITLE, Name );
+                if ( IP != null )
+                    result[ i ].getAttributes().put( INetwork.ADDRESS, IP );
+                if ( MAC != null )
+                    result[ i ].getAttributes().put( INetwork.MAC, MAC );
+                if ( Gateway != null )
+                    result[ i ].getAttributes().put( INetwork.GATEWAY, Gateway );
+                if ( Allocation != null )
+                    result[ i ].getAttributes().put( INetwork.ALLOCATION, Allocation );
+            }
+            
+            return result;
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    protected IStorage[] getStorageArray( String storageSet )
+    {
+        try
+        {
+            String separator = "_STORAGE_";
+            String[] elements = storageSet.split( separator );
+            IStorage[] result = new IStorage[ elements.length ];
+            for ( int i = 0; i < elements.length; i++ )
+            {
+                // example:  http://129.217.211.163:2364/derby/ttylinux.img;Mountpoint=/here;
+                
+                result[ i ]       = new IStorage();
+                String Name       = attr( elements[ i ], null         );
+                String Mountpoint = attr( elements[ i ], "Mountpoint" );
+                
+                if ( Name != null )
+                    result[ i ].getAttributes().put( IStorage.TITLE, Name );
+                if ( Mountpoint != null )
+                    result[ i ].getAttributes().put( IStorage.MOUNT_POINT, Mountpoint );
+            }
+            
+            return result;
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    protected static String attr( String data, String key )
+    {
+        if ( key == null ) // returns first attribute
+        {
+            String result = data.substring( 0, data.indexOf( ";" ) );
+            return result;
+        }
+        
+        int indexOf = data.indexOf( key );
+        if ( indexOf != -1 )
+        {
+            String result = data.substring( indexOf+key.length()+1, data.indexOf( ";", indexOf+key.length() ) );
+            return result;
+        }
+        
+        return null;
+    }
+    
     public static void main( String[] args )
     {
         try
         {
+            String example = "TestNetwork(627ba25a-09e8-11e1-997c-00163e211147);MAC=MACx;IP=IPx;Gateway=GWx;Allocation=ALLOx;";
+            System.out.println( attr( example, null ) );
+            System.out.println( attr( example, "MAC" ) );
+            if ( true ) return;            
+            
             OcciOneManagerImpl occi = new OcciOneManagerImpl();
             ICompute[] computes = occi.getComputes( "http://129.217.211.147:3000" );
             if ( computes != null )
