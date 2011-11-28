@@ -205,8 +205,8 @@ public class OcciOneManagerImpl implements IOCCIOneManager
     }
 
     // --------   COMPUTE    --------
-    @Override
-    public String createCompute( ICompute data )
+
+    public String createComputeDeprecated( ICompute data )
     {
         try
         {
@@ -270,6 +270,73 @@ public class OcciOneManagerImpl implements IOCCIOneManager
         return null;
     }
 
+    @Override
+    public String createCompute( ICompute data )
+    {
+        try
+        {
+            Hashtable<String, String> headers = new Hashtable<String, String>();
+            Hashtable<String, String> body    = new Hashtable<String, String>();
+            
+            headers.put( "Accept"      , "text/occi" );
+            headers.put( "Content-Type", "text/occi" );
+            headers.put( "Category"    , "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";" );
+            
+            String attr = "occi.core.title=\"%s\","           +
+            "occi.core.summary=\"%s\","         +
+            "occi.compute.architecture=\"%s\"," +
+            "occi.compute.cores=\"%s\","        +
+            "occi.compute.memory=%s";
+            
+            headers.put( "X-OCCI-Attribute", String.format( attr,
+                                                            data.getContent().get( ICompute.TITLE        ),
+                                                            data.getContent().get( ICompute.SUMMARY      ),
+                                                            data.getContent().get( ICompute.ARCHITECTURE ),
+                                                            data.getContent().get( ICompute.CORES        ),
+                                                            data.getContent().get( ICompute.MEMORY       )
+            ) );
+            
+            String link = "";
+            String networkSet = data.getContent().get( ICompute.NETWORK );
+            String storageSet = data.getContent().get( ICompute.STORAGE );
+            
+            String storageID = "";  // TODO:  tobe initialized 
+            if ( storageID.startsWith( "http://" ) ) // it's a CDMI storage
+            {
+                link = "</network/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#network\";category=\"http://schemas.ogf.org/occi/core#link\";," +
+                "<%s>;rel=" + "\"http://schemas.ogf.org/occi/core#link\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";";
+                
+                headers.put( "Link", String.format( link,
+                                                    data.getContent().get( ICompute.NETWORK ),
+                                                    storageID
+                ) );
+            }
+            else // it's a OCCI-image
+            {
+                link = "</network/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#network\";category=\"http://schemas.ogf.org/occi/core#link\";," +
+                "</storage/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#storage\";category=\"http://schemas.ogf.org/occi/core#link\";";
+                
+                headers.put( "Link", String.format( link,
+                                                    data.getContent().get( ICompute.NETWORK ),
+                                                    storageID
+                ) );
+            }
+            
+            String URI = data.getContent().get( INetwork.URI ) + "/compute/";
+            OcciResponse response = HttpUtils.post( URI, 
+                                                    headers, 
+                                                    body );
+            String result = null;
+            if ( response.content != null ) result = response.content[ 0 ];
+            return result;
+        }
+        catch ( Exception e )
+        {
+        }
+        
+        return null;
+    }
+    
     @Override
     public String deleteCompute( ICompute data )
     {
