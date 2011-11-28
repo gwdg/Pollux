@@ -306,8 +306,6 @@
                 <label for="network">Network </label>
                 <select name="network" id="network">
                     <option value="-1">--select one--</option>
-                    <option value="1">N1Test</option>
-                    <option value="2">N2Test</option>
                     <#if INetworkList?? && (INetworkList?size > 0) >
                         <#list INetworkList as net>
                             <option value="${net.content[ 'id' ]}">${net.attributes[ 'occi.core.title' ]}</option>
@@ -333,8 +331,6 @@
                 <select name="storage" id="storage">
                                 <optgroup label="OCCI Storage">
                                     <option value="-1">--select one--</option>
-                                    <option value="1">OCCi1Test</option>
-                                    <option value="2">OCCi2Test</option>
                                     <#if IStorageList?? && (IStorageList?size > 0) >
                                         <#list IStorageList as storage>
                                             <option value="${storage.content[ 'id' ]}">${storage.attributes[ 'occi.core.title' ]}</option>
@@ -342,8 +338,6 @@
                                     </#if>
                                 </optgroup>
                                 <optgroup label="CDMI Storage">
-                                    <option value="1">CDMi1Test</option>
-                                    <option value="2">CDMi2Test</option>
                                     <#if directory?? && (directory.entries > 0)>
                                         <#list directory.keys as container>
                                             <#if directory.content[ container ]?? && (directory.content[ container ]?size > 0) >
