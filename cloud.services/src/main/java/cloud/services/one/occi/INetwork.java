@@ -41,7 +41,9 @@ public class INetwork extends IElement
     public static final String URI        = "uri"       ;
     public static final String TITLE      = "title"     ;
     public static final String SUMMARY    = "summary"   ;
-    public static final String ADDRESS    = "address"   ;
+    public static final String ADDRESS    = "address"   ; //IP
     public static final String ALLOCATION = "allocation";
+    public static final String MAC        = "mac"       ;
+    public static final String GATEWAY    = "gateway"   ;
     public static final String VLAN       = "vlan"      ;
 }
