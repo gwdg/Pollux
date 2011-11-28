@@ -932,8 +932,8 @@ public class CloudWebController
             compute.content.put( ICompute.ARCHITECTURE, request.getParameter( "architecture" ) );
             compute.content.put( ICompute.CORES       , request.getParameter( "cores"        ) );
             compute.content.put( ICompute.MEMORY      , request.getParameter( "memory"       ) );
-            compute.content.put( ICompute.NETWORK     , request.getParameter( "network"      ) );
-            compute.content.put( ICompute.STORAGE     , request.getParameter( "storage"      ) );
+            compute.content.put( ICompute.NETWORK     , request.getParameter( "netset"       ) );
+            compute.content.put( ICompute.STORAGE     , request.getParameter( "storageset"   ) );
             
             String title = request.getParameter( "title" );
             if ( title != null && !title.equals( "" ))

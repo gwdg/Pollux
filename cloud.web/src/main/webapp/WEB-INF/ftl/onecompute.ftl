@@ -68,11 +68,13 @@
             });
                 
             // Network -------------------------------------------------------------------------------------
-            var $net_link     = $( "#network"  );
-            var $net_ip       = $( "#net_ip"   );
-            var $net_mac      = $( "#net_mac"  );
-            var net_instances = 1;
-            var editNet       = false;
+            var $net_link       = $( "#network"        );
+            var $net_mac        = $( "#net_mac"        );
+            var $net_ip         = $( "#net_ip"         );
+            var $net_gateway    = $( "#net_gateway"    );
+            var $net_allocation = $( "#net_allocation" );
+            var net_instances   = 1;
+            var editNet         = false;
     
             <#noparse>
             // tabs init with a custom tab template and an "add" callback filling in the content
@@ -82,10 +84,22 @@
                     var key   = $net_link.val();
                     var value = $('select#network :selected').text();
                     
-                    var net_mac = $net_mac.val();
-                    var net_ip  = $net_ip.val();
+                    var net_mac        = $net_mac       .val();
+                    var net_ip         = $net_ip        .val();
+                    var net_gateway    = $net_gateway   .val();
+                    var net_allocation = $net_allocation.val();
                     
-                   	$( ui.panel ).append( "<p>" + value + "("+key+");" + net_mac + ";" + net_ip + "</p>" );
+                    var __content = value + "("+key+");";
+                    if ( net_mac != "" )
+                        __content += "MAC=" + net_mac + ";";
+                    if ( net_ip != "" )
+                        __content += "IP=" + net_ip + ";";
+                    if ( net_gateway != "" )
+                        __content += "Gateway=" + net_gateway + ";";
+                    if ( net_allocation != "" )
+                        __content += "Allocation=" + net_allocation + ";";
+                    
+                    $( ui.panel ).append( "<p>" + __content + "</p>" );
                 }
             });
             </#noparse>
@@ -145,9 +159,10 @@
             // --- END of NETWORKS ----------------------------------------------------------------------
 
             // --- Storage ------------------------------------------------------------------------------
-            var $storage_link     = $( "#storage" );
-            var storage_instances = 1;
-            var editStorage       = false;
+            var $storage_link       = $( "#storage"            );
+            var $storage_mountpoint = $( "#storage_mountpoint" );
+            var storage_instances   = 1;
+            var editStorage         = false;
     
             <#noparse>
             // tabs init with a custom tab template and an "add" callback filling in the content
@@ -155,13 +170,21 @@
                 tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>",
                 add: function( event, ui ) {
                     var storageTitle = "Storage " + storage_instances;
-                    var key   = $storage_link.val();
-                    var value = $('select#storage :selected').text();
-                    
+                    var mountP = $storage_mountpoint.val();
+                    var key    = $storage_link.val();
+                    var value  = $('select#storage :selected').text();
+
+                    var __content = "";
                     if ( key.indexOf( "http" ) == 0 ) // cdmi
-                    	$( ui.panel ).append( "<p>" + value + "</p>" );
+                        __content = value + ";";
                     else
-                    	$( ui.panel ).append( "<p>" + value + "(" + key + ")</p>" );
+                        __content = value + "(" + key + ");";
+                        
+                    if ( mountP != "" )
+                    {
+                        __content += "Mountpoint=" + mountP + ";";
+                    }
+                    $( ui.panel ).append( "<p>" + __content + "</p>" );
                 }
             });
             </#noparse>
@@ -223,17 +246,22 @@
                 if ( editNet ) return false;
                 if ( editStorage ) return false;
 
-                alert( editNet + "::" + editStorage );
                 var _nets_ = "";
                 for ( idx = 1; idx < net_instances; idx++ )
                 {
                     var debugging = $("#NT-" + (idx)).find(":first");
-                    _nets_ += debugging.text() + "\n";
-                    // TODO:  update hidden fields
+                    _nets_ += debugging.text() + "_NET_";
                 }
-                alert ( "NETs:"+_nets_ );
+
+                var _storages_ = "";
+                for ( idx = 1; idx < storage_instances; idx++ )
+                {
+                    var debugging = $("#ST-" + (idx)).find(":first");
+                    _storages_ += debugging.text() + "_STORAGE_";
+                }
                 
-                return true;
+                $( "#netset" ).val( _nets_ );
+                $( "#storageset" ).val( _storages_ );
             });             
         });
         
@@ -278,6 +306,8 @@
                 <label for="network">Network </label>
                 <select name="network" id="network">
                     <option value="-1">--select one--</option>
+                    <option value="1">N1Test</option>
+                    <option value="2">N2Test</option>
                     <#if INetworkList?? && (INetworkList?size > 0) >
                         <#list INetworkList as net>
                             <option value="${net.content[ 'id' ]}">${net.attributes[ 'occi.core.title' ]}</option>
@@ -303,6 +333,8 @@
                 <select name="storage" id="storage">
                                 <optgroup label="OCCI Storage">
                                     <option value="-1">--select one--</option>
+                                    <option value="1">OCCi1Test</option>
+                                    <option value="2">OCCi2Test</option>
                                     <#if IStorageList?? && (IStorageList?size > 0) >
                                         <#list IStorageList as storage>
                                             <option value="${storage.content[ 'id' ]}">${storage.attributes[ 'occi.core.title' ]}</option>
@@ -310,6 +342,8 @@
                                     </#if>
                                 </optgroup>
                                 <optgroup label="CDMI Storage">
+                                    <option value="1">CDMi1Test</option>
+                                    <option value="2">CDMi2Test</option>
                                     <#if directory?? && (directory.entries > 0)>
                                         <#list directory.keys as container>
                                             <#if directory.content[ container ]?? && (directory.content[ container ]?size > 0) >
@@ -355,7 +389,9 @@
             <h1 align="left">OCCI:: Compute &nbsp;&nbsp;<a href="/cloud/app/xmenu.htm?session=${session.id}"><img src="../images/go_home.png" border="0" longdesc="home"></a></h1>
             <div class="xcontainer">
             <form id="onecomputeForm" method="POST" action="onecompute.htm" > 
-                <input name="session" type="hidden" value="${session.id}" />
+                <input name="session"    type="hidden"   value="${session.id}"  />
+                <input name="netset"     id="netset"     type="hidden" value="" />
+                <input name="storageset" id="storageset" type="hidden" value="" />
                   <table width="410" border="0">
                     <tr>
                       <td width="85"><div align="right"><strong><em>OCCI</em></strong>:&nbsp; </div></td>
