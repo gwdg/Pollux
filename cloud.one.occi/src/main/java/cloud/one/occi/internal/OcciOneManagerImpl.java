@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, X-Juvi
+ * Copyright (c) 2011, Pollux
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,14 +9,14 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of X-Juvi
+ *     * Neither the name of Pollux
  * 	  nor the names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL X-Juvi
+ * DISCLAIMED. IN NO EVENT SHALL Pollux
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -297,34 +297,84 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             ) );
             
             String link = "";
-            String networkSet = data.getContent().get( ICompute.NETWORK );
-            String storageSet = data.getContent().get( ICompute.STORAGE );
+            String networkData = data.getContent().get( ICompute.NETWORK );
+            String storageData = data.getContent().get( ICompute.STORAGE );
             
-            INetwork[] networkArray = getNetworkArray( networkSet );
-            IStorage[] storageArray = getStorageArray( storageSet );
+            INetwork[] networkArray = getNetworkArray( networkData );
+            IStorage[] storageArray = getStorageArray( storageData );
             
-            String storageID = "";  // TODO:  tobe initialized 
-            if ( storageID.startsWith( "http://" ) ) // it's a CDMI storage
+            String networkPattern           = "</network/%s>;rel=" + "\"http://schemas.ogf.org/occi/core#link\";category=\"http://schemas.ogf.org/occi/infrastructure#networkinterface\";";
+            String networkMacPattern        = "occi.networkinterface.mac=\"%s\";";
+            String networkInterfacePattern  = "occi.networkinterface.interface=\"%s\";";
+            String networkIPPattern         = "occi.networkinterface.address=\"%s\";";
+            String networkGatewayPattern    = "occi.networkinterface.gateway=\"%s\";";
+            String networkAllocPattern      = "occi.networkinterface.allocation=\"%s\";";
+            String cdmiStoragePattern       = "<%s>;rel=" + "\"http://schemas.ogf.org/occi/core#link\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";";
+            String occiStoragePattern       = "</storage/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#storage\";category=\"http://schemas.ogf.org/occi/core#link\";";
+
+            StringBuffer sbNetwork = new StringBuffer(); 
+            for ( int i = 0; i < networkArray.length; i++ )
             {
-                link = "</network/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#network\";category=\"http://schemas.ogf.org/occi/core#link\";," +
-                "<%s>;rel=" + "\"http://schemas.ogf.org/occi/core#link\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";";
+                // Network interface
+                INetwork in        = networkArray[ i ];
+                String nID         = in.getAttributes().get( INetwork.ID         );
+                String nMac        = in.getAttributes().get( INetwork.MAC        );
+                String nInterface  = in.getAttributes().get( INetwork.INTERFACE  );
+                String nIP         = in.getAttributes().get( INetwork.ADDRESS    );
+                String nGateway    = in.getAttributes().get( INetwork.GATEWAY    );
+                String nAlloc      = in.getAttributes().get( INetwork.ALLOCATION );
+                sbNetwork.append( String.format( networkPattern, nID ) );
                 
-                headers.put( "Link", String.format( link,
-                                                    data.getContent().get( ICompute.NETWORK ),
-                                                    storageID
-                ) );
-            }
-            else // it's a OCCI-image
-            {
-                link = "</network/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#network\";category=\"http://schemas.ogf.org/occi/core#link\";," +
-                "</storage/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#storage\";category=\"http://schemas.ogf.org/occi/core#link\";";
+                if ( nMac != null && !nMac.equals( "" ) )
+                    sbNetwork.append( String.format( networkMacPattern, nMac ) );
                 
-                headers.put( "Link", String.format( link,
-                                                    data.getContent().get( ICompute.NETWORK ),
-                                                    storageID
-                ) );
+                if ( nInterface != null && !nInterface.equals( "" ) )
+                    sbNetwork.append( String.format( networkInterfacePattern, nInterface ) );
+                
+                if ( nIP != null && !nIP.equals( "" ) )
+                    sbNetwork.append( String.format( networkIPPattern, nIP ) );
+                
+                if ( nGateway != null && !nMac.equals( "" ) )
+                    sbNetwork.append( String.format( networkGatewayPattern, nGateway ) );
+                
+                if ( nAlloc != null && !nAlloc.equals( "" ) )
+                    sbNetwork.append( String.format( networkAllocPattern, nAlloc ) );
+                
+               if ( i < networkArray.length-1 ) // more networks ?
+                   sbNetwork.append( "," );
             }
             
+            StringBuffer sbStorage = new StringBuffer(); 
+            for ( int i = 0; i < storageArray.length; i++ )
+            {
+                // Storage
+                IStorage storage = storageArray[ i ];
+                String uri = storage.getAttributes().get( IStorage.URI );
+                if ( uri != null && !uri.equals( "" ) ) // it's a CDMI storage
+                {
+                    sbStorage.append( String.format( cdmiStoragePattern, uri ) );
+                }
+                else // it's a OCCI-image
+                {
+                    String id = storage.getAttributes().get( IStorage.ID );
+                    sbStorage.append( String.format( occiStoragePattern, id ) );
+                }
+                
+                if ( i < storageArray.length-1 ) // more storages ?
+                    sbStorage.append( "," );
+            }
+            
+            StringBuffer links = new StringBuffer();
+            String networkSET = sbNetwork.toString().trim();
+            String storageSET = sbStorage.toString().trim();
+            
+            links.append( networkSET );
+            if ( !links.toString().equals( "" ) )
+                links.append( "," );
+            links.append( storageSET );
+            
+            headers.put( "Link", links.toString() ); 
+
             String URI = data.getContent().get( INetwork.URI ) + "/compute/";
             OcciResponse response = HttpUtils.post( URI, 
                                                     headers, 
@@ -559,21 +609,29 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             INetwork[] result = new INetwork[ elements.length ];
             for ( int i = 0; i < elements.length; i++ )
             {
-                // example:  TestNetwork(627ba25a-09e8-11e1-997c-00163e211147);MAC=MACx;IP=IPx;Gateway=GWx;Allocation=ALLOx;
+                // example:  TestNetwork(627ba25a-09e8-11e1-997c-00163e211147);Interface=Intx;MAC=MACx;IP=IPx;Gateway=GWx;Allocation=ALLOx;
                 
                 result[ i ]       = new INetwork();
                 String Name       = attr( elements[ i ], null         );
-                String IP         = attr( elements[ i ], "IP"         );
                 String MAC        = attr( elements[ i ], "MAC"        );
+                String Interface  = attr( elements[ i ], "Interface"  );
+                String IP         = attr( elements[ i ], "IP"         );
                 String Gateway    = attr( elements[ i ], "Gateway"    );
                 String Allocation = attr( elements[ i ], "Allocation" );
                 
                 if ( Name != null )
-                    result[ i ].getAttributes().put( INetwork.TITLE, Name );
-                if ( IP != null )
-                    result[ i ].getAttributes().put( INetwork.ADDRESS, IP );
+                {
+                    String id    = Name.substring( Name.indexOf( "(" )+1, Name.indexOf( ")" ) );
+                    String title = Name.substring( 0, Name.indexOf( "(" ) );
+                    result[ i ].getAttributes().put( INetwork.ID   , id    );
+                    result[ i ].getAttributes().put( INetwork.TITLE, title );
+                }
                 if ( MAC != null )
                     result[ i ].getAttributes().put( INetwork.MAC, MAC );
+                if ( Interface != null )
+                    result[ i ].getAttributes().put( INetwork.INTERFACE, Interface );
+                if ( IP != null )
+                    result[ i ].getAttributes().put( INetwork.ADDRESS, IP );
                 if ( Gateway != null )
                     result[ i ].getAttributes().put( INetwork.GATEWAY, Gateway );
                 if ( Allocation != null )
@@ -599,14 +657,34 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             IStorage[] result = new IStorage[ elements.length ];
             for ( int i = 0; i < elements.length; i++ )
             {
-                // example:  http://129.217.211.163:2364/derby/ttylinux.img;Mountpoint=/here;
+                // example-1:  http://129.217.211.163:2364/derby/ttylinux.img;Mountpoint=/here;
+                // example-2:  OCCIName(ID);Mountpoint=/here;
                 
                 result[ i ]       = new IStorage();
                 String Name       = attr( elements[ i ], null         );
                 String Mountpoint = attr( elements[ i ], "Mountpoint" );
                 
                 if ( Name != null )
-                    result[ i ].getAttributes().put( IStorage.TITLE, Name );
+                {
+                    String id    = "";
+                    String title = "";
+                    String uri   = "";
+                    
+                    if ( Name.indexOf( "http" ) == 0 ) // cdmi storage
+                    {
+                        uri = Name;
+                        result[ i ].getAttributes().put( IStorage.URI, uri );
+                    }
+                    else  // OCCI
+                    {
+                        title = Name.substring( 0, Name.indexOf( "(" ) );
+                        id    = Name.substring( Name.indexOf( "(" )+1, Name.indexOf( ")" ) );
+                        result[ i ].getAttributes().put( IStorage.ID   , id    );
+                        result[ i ].getAttributes().put( IStorage.TITLE, title );
+                    }
+                    
+                    
+                }
                 if ( Mountpoint != null )
                     result[ i ].getAttributes().put( IStorage.MOUNT_POINT, Mountpoint );
             }

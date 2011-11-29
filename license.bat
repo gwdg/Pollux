@@ -3,7 +3,7 @@
 :MENU
 cls
 echo          =====================
-echo          º    UDO LICENSE    º
+echo          º  POLLUX LICENSE   º
 echo          =====================
 echo          º  0. Quit          º
 echo          º  1. Check         º
@@ -20,15 +20,15 @@ if "%userinp%"=="3" goto remove
 goto MENU
 
 :check
-mvn license:check -Dyear=2011 -Dorganisation="X-Juvi"
+mvn license:check -Dyear=2011 -Dorganisation="Pollux"
 goto MENU
 
 :format
-mvn license:format -Dyear=2011 -Dorganisation="X-Juvi"
+mvn license:format -Dyear=2011 -Dorganisation="Pollux"
 goto MENU
 
 :remove
-mvn license:remove -Dyear=2011 -Dorganisation="X-Juvi"
+mvn license:remove -Dyear=2011 -Dorganisation="Pollux"
 goto MENU
 
 :END

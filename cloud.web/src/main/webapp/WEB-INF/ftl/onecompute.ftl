@@ -70,6 +70,7 @@
             // Network -------------------------------------------------------------------------------------
             var $net_link       = $( "#network"        );
             var $net_mac        = $( "#net_mac"        );
+            var $net_interface  = $( "#net_interface"  );
             var $net_ip         = $( "#net_ip"         );
             var $net_gateway    = $( "#net_gateway"    );
             var $net_allocation = $( "#net_allocation" );
@@ -85,6 +86,7 @@
                     var value = $('select#network :selected').text();
                     
                     var net_mac        = $net_mac       .val();
+                    var net_interface  = $net_interface .val();
                     var net_ip         = $net_ip        .val();
                     var net_gateway    = $net_gateway   .val();
                     var net_allocation = $net_allocation.val();
@@ -92,6 +94,8 @@
                     var __content = value + "("+key+");";
                     if ( net_mac != "" )
                         __content += "MAC=" + net_mac + ";";
+                    if ( net_interface != "" )
+                        __content += "Interface=" + net_interface + ";";
                     if ( net_ip != "" )
                         __content += "IP=" + net_ip + ";";
                     if ( net_gateway != "" )
@@ -312,10 +316,12 @@
                         </#list>
                     </#if>
                     </select><br>
-                <label for="net_ip">IP Address</label>
-                <input type="text" name="net_ip" id="net_ip" value="" class="ui-widget-content ui-corner-all" />
                 <label for="net_mac">Mac-Address </label>
                 <input type="text" name="net_mac" id="net_mac" value="" class="ui-widget-content ui-corner-all" />
+                <label for="net_mac">Interface </label>
+                <input type="text" name="net_interface" id="net_interface" value="" class="ui-widget-content ui-corner-all" />
+                <label for="net_ip">IP Address</label>
+                <input type="text" name="net_ip" id="net_ip" value="" class="ui-widget-content ui-corner-all" />
                 <label for="net_gateway">Gateway </label>
                 <input type="text" name="net_gateway" id="net_gateway" value="" class="ui-widget-content ui-corner-all" />
                 <label for="net_allocation">Allocation </label>
