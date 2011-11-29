@@ -52,42 +52,53 @@ Web Artifact
 
 PRE-REQUISITES
 ==============
-//TODO: describe each item
-Java Environment JDK 1.6
-Maven 3.0.3
-Virgo Eclipse Server (tomcat-based)
-Third-party Libraries
+The Client Pollux requires following products installed in your computer:
+
+.  Java Environment JDK 1.6   			(source:  http://www.oracle.com/technetwork/java/index.html)
+.  Maven 3.0.3                			(source:  http://maven.apache.org/download.html)
+.  Virgo Eclipse Server (tomcat-based)  (source:  http://www.eclipse.org/virgo/download )
+
+All Third-party libraries required by the Client will be downloaded automatically by Maven once you 
+try to compile the whole project.
 
 BUILDING POLLUX
 ===============
-//TODO:  complete subsections
+
 Download
 ---------
 The code of Pollux is stored into a Github repository
 and can be downloaded from the location:
- http://...
+ https://github.com/gwdg/Pollux
 
 Compilation
 ------------
 The Pollux client is a maven-based project which makes 
 use of several maven plugins for its building and deployment.
-* maven compile
-* maven install
-* maven rebuild
-* maven deploy
-*** Pollux deployment under Virgo
+
+Assuming the root path of Pollux source code is %POLLUX_HOME%, following commands are available
+for building the project:
+
+* maven compile:   %POLLUX_HOME%/mvn compile
+* maven install:   %POLLUX_HOME%/mvn install
+* maven rebuild:   %POLLUX_HOME%/mvn clean compile install
+
+*** Pollux deployment under Virgo:   %POLLUX_HOME%/deploy.bat
 
 Deployment
 -----------
 
 CONFIGURATION
 =============
-//TODO:
+
 Virgo Eclipse Server
 ---------------------
+One of the flavors of Virgo Eclipse Server is based on Tomcat. The configuration of Tomcat web server can be located
+under %VIRGO_INSTALLATION_DIRECTORY%/config/tomcat-server.xml
 
 STARTING-UP POLLUX
 ==================
-//TODO:
-starting web server
-debugging pollux
+
+starting web server:   %VIRGO_INSTALLATION_DIRECTORY%/bin/startup.bat -clean 
+debugging pollux:   %VIRGO_INSTALLATION_DIRECTORY%/bin/startup.bat -clean -debug
+
+end point reference of pollux :  http://localhost:8080/cloud/app/login.htm
