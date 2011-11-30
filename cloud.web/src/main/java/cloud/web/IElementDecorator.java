@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import cloud.services.one.occi.IElement;
+import cloud.services.one.occi.ILink;
 import cloud.services.one.occi.INetwork;
 
 /**
@@ -79,6 +80,31 @@ public class IElementDecorator
             result[ i ][ 0 ] = pair[ 1 ];
             String value = decorated.attributes.get( pair[ 0 ] );
             result[ i ][ 1 ] = (value!=null?value:"not available");
+        }
+        
+        return result;
+    }
+    
+    public String[][] getLinks()
+    {
+        int len = decorated.getLinks().size();
+        String[][] result = new String[ len ][];
+        for ( int i = 0; i < len; i++ )
+        {
+            ILink l = decorated.getLinks().get( i );
+            String caption = l.get( ILink.TITLE );
+            result[ i ] = new String[ l.size() ];
+            result[ i ][ 0 ] = caption;
+            
+            int j = 1;
+            for ( String k : l.keySet() )
+            {
+                if ( k.equals( ILink.TITLE ) ) continue;
+                
+                String value = l.get(k);
+                result[ i ][ j ] = "<b>"+k+"</b>:"+value;
+                j++;
+            }
         }
         
         return result;

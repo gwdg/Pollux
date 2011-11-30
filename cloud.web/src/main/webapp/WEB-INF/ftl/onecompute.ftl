@@ -10,9 +10,9 @@
     <script type="text/javascript" src="<@spring.url '/jqueryui/js/jquery-1.6.2.min.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/jqueryui/js/jquery-ui-1.8.16.custom.min.js'/>"></script>
     <script type="text/javascript">
-        // Accordion
         $(function(){
             
+			// Accordion
             $("#accordion").accordion({ header: "h3" });
         
             // Cores-Slider
@@ -245,7 +245,7 @@
             
             // --- END of STORAGES ----------------------------------------------------------------------
 
-            // Form
+			// Form
             $('#onecomputeForm').submit(function() {
                 if ( editNet ) return false;
                 if ( editStorage ) return false;
@@ -296,7 +296,7 @@
         #storageTabs { margin-top: 1em; }
         #storageTabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
         #add_storage { cursor: pointer; }
-
+        
     </style>
 </head>
 <body class="main tundra">
@@ -382,7 +382,6 @@
             <img id="right-curve" src="/cloud/images/menu-curve-right.png"/>
         </div><!-- /primary-navigation -->
 
-        
         <div id="container">
         <div id="results-no-nav">
         
@@ -492,6 +491,7 @@
           </form>
           </div>
           
+			<#assign vmIDx = 1>
             <#if IElementDecoratorList?? && (IElementDecoratorList?size > 0) >
                 <h2>Available VMs  (${IElementDecoratorList?size}) &nbsp;&nbsp;<a href="onecompute.htm?init=true&session=${session.id}"><img src="../images/refresh.png" border="0" alt="delete"></a></h2>
                 <div class="demo">
@@ -500,7 +500,7 @@
                             <#assign element    = compute.element>
                             <#assign caption    = compute.caption>
                             <#assign attributes = compute.values>
-                            <#assign links      = compute.element.links>
+                            <#assign links      = compute.links>
                             <h3><a href="#">${caption[ 1 ]}&nbsp;</a></h3>
                             <div>
                                 <p>
@@ -512,18 +512,38 @@
                                         </tr>
                                     </#list>
                                   </table>
-                                  <table width="340" border="0">
+                                  <table width="560" border="0">
                                     <#if links?? && (links?size > 0) >
                                         <tr class="iattribute">
-                                          <td align="right" width="30%"><b>Links:</b></td>
-                                          <td width="70%">&nbsp;</td>
+                                          <td align="right" width="10%"><b>Links:</b></td>
+                                          <td width="90%">&nbsp;</td>
                                         </tr>
-                                        <#list links as lk>
                                             <tr class="iattribute">
-                                              <td align="right" width="30%">&nbsp;</td>
-                                              <td width="70%" nowrap="nowrap">${lk}</td>
+                                              <td align="right" width="10%">&nbsp;</td>
+                                              <td width="90%" nowrap="nowrap">
+												<div id="vmlinks-${vmIDx}">
+													<ul>
+														<#assign idx = 1>
+				                                        <#list links as lk>
+															<li><a href="#vmlinks-${vmIDx}-${idx}">${lk[ 0 ]}</a></li>
+														    <#assign idx = idx + 1>
+				                                        </#list>
+													</ul>
+													<#assign idy = 1>
+			                                        <#list links as lkc>
+														<div id="vmlinks-${vmIDx}-${idy}">
+															<p>
+																<#list lkc as lP>
+																	&nbsp;&nbsp;${lP}<br>
+																</#list>
+															</p>
+														</div>
+													    <#assign idy = idy + 1>
+			                                        </#list>
+												</div>
+                                              	
+                                              </td>
                                             </tr>
-                                        </#list>
                                     </#if>
                                   </table>
                                   <br>
@@ -542,8 +562,26 @@
                                   </table>
                                 </p>
                             </div>
+                            <#assign vmIDx = vmIDx + 1>
                         </#list>
                     </div>
+    <script type="text/javascript">
+        $(function(){
+			<#list 1 .. vmIDx-1 as lx >
+				$( "#vmlinks-${lx}" ).tabs({
+					event: "mouseover"
+				});
+			</#list>
+        });
+	</script>
+	
+    <style>
+			<#list 1 .. vmIDx-1 as lx >
+	        	#vmlinks-${lx}.ui-widget { font-size: 0.9em; }
+			</#list>
+        });
+    </style>
+	
                     </div><!-- End xcontainer -->
             <#else>
                 <br>

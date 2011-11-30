@@ -43,11 +43,11 @@ public class IElement
 {
     public HashMap<String, String> content    = new HashMap<String, String>();
     public HashMap<String, String> attributes = new HashMap<String, String>();
-    public ArrayList<String>       links      = new ArrayList<String>();
+    public ArrayList<ILink>        links      = new ArrayList<ILink>();
     
     public HashMap<String, String> getContent   (){ return content   ; }
     public HashMap<String, String> getAttributes(){ return attributes; }
-    public ArrayList<String>       getLinks     (){ return links     ; }
+    public ArrayList<ILink>        getLinks     (){ return links     ; }
     
     public ArrayList<String> getAttrKeys()
     {
