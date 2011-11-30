@@ -45,10 +45,14 @@ as maven artifacts.
 
 MAIN COMPONENTS
 ===============
-//TODO:
-OCCI Artifact
-CDMI Artifact
-Web Artifact
+The client is composed mainly by three components: OCCI Artifact, 
+CDMI Artifact and Web Artifact. These components can be used inside 
+OSGi platforms or as libraries independently each other.
+
+see details in :  
+	https://github.com/gwdg/Pollux/cloud.web/readme/globalview.jpg
+	https://github.com/gwdg/Pollux/cloud.web/readme/osgiview.JPG
+
 
 PRE-REQUISITES
 ==============
