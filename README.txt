@@ -58,9 +58,12 @@ PRE-REQUISITES
 ==============
 The Client Pollux requires following products installed in your development environment:
 
-.  Java Environment JDK 1.6   			(source:  http://www.oracle.com/technetwork/java/index.html)
-.  Maven 3.0.3                			(source:  http://www.apache.org/dyn/closer.cgi/maven/binaries/apache-maven-3.0.3-bin.zip)
-.  Virgo Eclipse Server (tomcat-based)  (source:  http://www.eclipse.org/downloads/download.php?file=/virgo/release/VTS/3.0.2.RELEASE/virgo-tomcat-server-3.0.2.RELEASE.zip )
+.  Java Environment JDK 1.6   			
+   (source:  http://www.oracle.com/technetwork/java/index.html)
+.  Maven 3.0.3                			
+  (source:  http://www.apache.org/dyn/closer.cgi/maven/binaries/apache-maven-3.0.3-bin.zip)
+.  Virgo Eclipse Server (tomcat-based)  
+  (source:  http://www.eclipse.org/downloads/download.php?file=/virgo/release/VTS/3.0.2.RELEASE/virgo-tomcat-server-3.0.2.RELEASE.zip )
 
 All Third-party libraries required by the Client will be downloaded automatically by Maven once you 
 have compiled the whole project.
