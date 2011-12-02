@@ -56,14 +56,14 @@ see details in :
 
 PRE-REQUISITES
 ==============
-The Client Pollux requires following products installed in your computer:
+The Client Pollux requires following products installed in your development environment:
 
 .  Java Environment JDK 1.6   			(source:  http://www.oracle.com/technetwork/java/index.html)
 .  Maven 3.0.3                			(source:  http://maven.apache.org/download.html)
 .  Virgo Eclipse Server (tomcat-based)  (source:  http://www.eclipse.org/virgo/download )
 
 All Third-party libraries required by the Client will be downloaded automatically by Maven once you 
-try to compile the whole project.
+have compiled the whole project.
 
 BUILDING POLLUX
 ===============
@@ -86,10 +86,10 @@ for building the project:
 * maven install:   %POLLUX_HOME%/mvn install
 * maven rebuild:   %POLLUX_HOME%/mvn clean compile install
 
-*** Pollux deployment under Virgo:   %POLLUX_HOME%/deploy.bat
-
 Deployment
 -----------
+
+*** Pollux deployment under Virgo:   %POLLUX_HOME%/deploy.bat
 
 CONFIGURATION
 =============
@@ -103,6 +103,6 @@ STARTING-UP POLLUX
 ==================
 
 starting web server:   %VIRGO_INSTALLATION_DIRECTORY%/bin/startup.bat -clean 
-debugging pollux:   %VIRGO_INSTALLATION_DIRECTORY%/bin/startup.bat -clean -debug
+debugging pollux:      %VIRGO_INSTALLATION_DIRECTORY%/bin/startup.bat -clean -debug
 
 end point reference of pollux :  http://localhost:8080/cloud/app/login.htm
