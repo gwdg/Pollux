@@ -40,8 +40,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
 
 import cloud.services.one.occi.ICompute;
+import cloud.services.one.occi.ILink;
 import cloud.services.one.occi.INetwork;
 import cloud.services.one.occi.IStorage;
 
@@ -210,9 +215,9 @@ public class OcciExecutorCompletionService
                     }
                     else if ( attr.startsWith( "Link" ) ) // Format[  Link: </api/compute/ea97ad10-8272-4df3-a9dc-484b0aa75902?action=start>; ... ]
                     {
-                        String linkCnt = attr.substring( attr.indexOf( "<" )+1, attr.indexOf( ">" ) );
-                        
-                        this.vm.getLinks().add( linkCnt );
+                        ILink link = buildLinkFrom( attr );
+                        if ( link != null )
+                            this.vm.getLinks().add( link );
                     }
                 }
             }
@@ -262,9 +267,9 @@ public class OcciExecutorCompletionService
                     }
                     else if ( attr.startsWith( "Link" ) ) // Format[  Link: </api/compute/ea97ad10-8272-4df3-a9dc-484b0aa75902?action=start>; ... ]
                     {
-                        String linkCnt = attr.substring( attr.indexOf( "<" )+1, attr.indexOf( ">" ) );
-                        
-                        this.storage.getLinks().add( linkCnt );
+                        ILink link = buildLinkFrom( attr );
+                        if ( link != null )
+                            this.storage.getLinks().add( link );
                     }
                 }
             }
@@ -314,14 +319,62 @@ public class OcciExecutorCompletionService
                     }
                     else if ( attr.startsWith( "Link" ) ) // Format[  Link: </api/compute/ea97ad10-8272-4df3-a9dc-484b0aa75902?action=start>; ... ]
                     {
-                        String linkCnt = attr.substring( attr.indexOf( "<" )+1, attr.indexOf( ">" ) );
-                        
-                        this.net.getLinks().add( linkCnt );
+                        ILink link = buildLinkFrom( attr );
+                        if ( link != null )
+                            this.net.getLinks().add( link );
                     }
                 }
             }
             
             return this.net;
         }
+    }
+    
+    protected ILink buildLinkFrom( String link )
+    {
+        ILink result = new ILink();
+        String linkCnt = link.substring( link.indexOf( "<" )+1, link.indexOf( ">" ) );
+        result.put( ILink.TITLE, linkCnt );
+        
+        // extract set of attributes from 'link' variable
+        // link example: "Link: <data attr=\"va\">abcdefg123456789;;occi.core.source=\"/compute/e1426c98-0b84-11e1-9e8e-00163e211147\";occi.core.target=\"value\";abcdefg123456789";
+        String lnRE = "(occi.(?:\"[^\"]*\"|[^=;])*)=((?:\"[^\"]*\"|[^=;])*)";
+        
+        Pattern p = Pattern.compile( lnRE );
+        Matcher m = p.matcher( link );
+        
+        while ( m.find() ) 
+        {
+            if ( m.groupCount() == 2 )
+            {
+                String key   = m.group( 1 );
+                String value = m.group( 2 );
+                result.put( key, StringUtils.removeEnd( StringUtils.removeStart( value, "\"" ), "\"" ) );
+            }
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args) 
+    {
+        String link = "Link: <data attr=\"va\">abcdefg123456789;;occi.core.source=\"/compute/e1426c98-0b84-11e1-9e8e-00163e211147\";occi.core.target=\"value\";abcdefg123456789";
+        String lnRE = "(occi.(?:\"[^\"]*\"|[^=;])*)=((?:\"[^\"]*\"|[^=;])*)";
+        
+        Pattern p = Pattern.compile( lnRE );
+        Matcher m = p.matcher( link );
+        
+        while ( m.find() ) 
+        {
+            String matchedKey   = m.group( 1 );
+            String matchedValue = m.group( 2 );
+            
+            int matchedFrom = m.start();
+            int matchedTo = m.end();
+            
+            System.out.println( "matched [" + matchedKey + ":" + matchedValue + "] from " +
+                                matchedFrom + " to " + matchedTo + "." );
+            
+        } 
     }
 }

@@ -11,5 +11,6 @@ Import-Template:
  org.apache.http.*;version="[3.0, 5.0)",
  org.apache.commons.httpclient.*;version="[3.1.0, 3.2)",
  net.sf.json.*;version="[2.0, 2.3)",
+ org.apache.commons.lang;version="[2.1.0,3.0.0]"
 Excluded-Exports: 
  cloud.one.occi.internal
