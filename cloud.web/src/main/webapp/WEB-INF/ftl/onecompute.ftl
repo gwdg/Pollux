@@ -569,7 +569,8 @@
         $(function(){
 			<#list 1 .. vmIDx-1 as lx >
 				$( "#vmlinks-${lx}" ).tabs({
-					event: "mouseover"
+					event: "mouseover",
+					collapsible: true
 				});
 			</#list>
         });
