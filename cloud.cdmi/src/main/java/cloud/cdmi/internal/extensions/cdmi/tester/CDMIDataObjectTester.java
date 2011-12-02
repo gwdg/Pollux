@@ -28,7 +28,7 @@
  * @version        1.0
  * @lastrevision   15.11.2011
  */
-package cloud.cdmi.internal.de.udo.one.extensions.cdmi.tester;
+package cloud.cdmi.internal.extensions.cdmi.tester;
 
 import java.util.Hashtable;
 
