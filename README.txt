@@ -24,9 +24,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @author         Miguel Rojas (miguel.rojas@uni-dortmund.de)
+ * @author         Miguel Rojas (email.miguel.rojas@googlemail.com)
  * @version        1.0
- * @lastrevision   28.11.2011
+ * @lastrevision   02.12.2011
  */
 
 OCCI-CDMI Client :: Pollux
