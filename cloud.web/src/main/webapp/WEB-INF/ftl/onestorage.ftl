@@ -108,6 +108,15 @@
 										</tr>
 									</table>
 								</div>
+    						<h3><a href="#">Open URL</a></h3>
+    							<div>
+									<table width="400" border="0">
+										<tr>
+										  <td width="75"><div align="right">URI:&nbsp; </div></td>
+										  <td width="325"><input name="url"  type="text" size="30" /></td>
+										</tr>
+									</table>
+								</div>
 						</div>
 					  </td>
 					</tr>
