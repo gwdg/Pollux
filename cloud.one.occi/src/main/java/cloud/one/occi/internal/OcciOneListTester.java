@@ -99,7 +99,8 @@ public class OcciOneListTester
         {
             System.out.println( "--  GETTING ALL COMPUTEs ------------------" );
             OcciOneManagerImpl occi = new OcciOneManagerImpl();
-            ICompute[] compute = occi.getComputes( "http://129.217.211.147:3000" );
+            //ICompute[] compute = occi.getComputes( "http://129.217.211.147:3000" );
+            ICompute[] compute = occi.getComputes( "http://134.76.9.66:3000" );// GWDG
             //ICompute[] compute = occi.getComputes( "http://www.nyren.net/api" );
             
             System.out.println( "Computers found:"+compute.length );

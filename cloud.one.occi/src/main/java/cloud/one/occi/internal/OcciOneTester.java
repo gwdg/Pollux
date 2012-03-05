@@ -86,7 +86,7 @@ public class OcciOneTester
             System.out.println( "\t |- ID: '"+storage.content.get( IStorage.ID )+"'" );
             
             System.out.println( "--  DELETING STORAGE ------------------" );
-            String del = occi.deleteStorage( storage );
+            String del = occi.deleteStorage( storage, storage.getContent().get(IStorage.TITLE) );
             System.out.println( "\t |- RES: '"+del );
         }
         catch ( Exception e )

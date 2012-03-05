@@ -61,12 +61,13 @@ public class OCCIExample
         }
     }
     
-    public void createVM()
+    public String createVM()
     {
         try
         {
             ICompute vm = new ICompute();
-            String URI = "http://129.217.211.147:3000";
+            //String URI = "http://129.217.211.147:3000"; // TUDO
+            String URI = "http://134.76.9.66:3000";
             
             vm.content.put( ICompute.URI         , URI            );
             vm.content.put( ICompute.TITLE       , "MyVM"         );
@@ -74,23 +75,26 @@ public class OCCIExample
             vm.content.put( ICompute.ARCHITECTURE, "x64"          );
             vm.content.put( ICompute.CORES       , "2"            );
             vm.content.put( ICompute.MEMORY      , "32"           );
-            vm.content.put( ICompute.NETWORK     , "networkID"    );
-            vm.content.put( ICompute.STORAGE     , "storageID"    );
+            vm.content.put( ICompute.NETWORK     , "TestNetwork(627ba25a-09e8-11e1-997c-00163e211147);MAC=MACx;IP=IPx;Gateway=GWx;Allocation=ALLOx;"    );
+            vm.content.put( ICompute.STORAGE     , "http://129.217.211.163:2364/derby/ttylinux.img;Mountpoint=/here;"    );
                 
-            occi.createCompute( vm );
-            occi.startCompute ( vm );
+            return occi.createCompute( vm );
+           // occi.startCompute ( vm );
         }
         catch ( Exception e )
         {
             e.printStackTrace();
         }
+		return null;
     }
     
     public void dumpVMs()
     {
         try
         {
-            ICompute[] computes = occi.getComputes( "http://129.217.211.147:3000" );
+          //  ICompute[] computes = occi.getComputes( "http://129.217.211.147:3000" );
+            ICompute[] computes = occi.getComputes( "http://134.76.9.66:3000" );
+            
             if ( computes != null )
                 for ( ICompute s : computes )
                 {
@@ -106,7 +110,8 @@ public class OCCIExample
     public static void main( String[] args )
     {
         OCCIExample ex = new OCCIExample();
-        ex.createVM();
+        System.out.print(ex.createVM());
+        
     }
     
     protected IOCCIOneManager occi;

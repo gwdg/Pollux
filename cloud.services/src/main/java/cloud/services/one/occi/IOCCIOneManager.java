@@ -41,12 +41,16 @@ public interface IOCCIOneManager
     public String deleteNetwork( INetwork data );
     
     public String createStorage( IStorage data );
-    public String deleteStorage( IStorage data );
+    public String deleteStorage( IStorage data, String storageType );
     
     public String createCompute( ICompute data );
     public String deleteCompute( ICompute data );
     public String startCompute ( ICompute data );
     public String stopCompute  ( ICompute data );
+    public String restartCompute  ( ICompute data );
+    public String getNetworkId(String networkName);
+    public String getStorageId(String storageName);
+    
     
     public String createTemplate( ITemplate data );
     public String deleteTemplate( ITemplate data );
@@ -55,4 +59,5 @@ public interface IOCCIOneManager
     public IStorage [] getStorages ( String uri );
     public ICompute [] getComputes ( String uri );
     public ITemplate[] getTemplates( String uri );
+    
 }

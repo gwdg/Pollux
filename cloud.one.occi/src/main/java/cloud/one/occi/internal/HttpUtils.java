@@ -59,6 +59,24 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 public class HttpUtils
 {
+	/* GWDG IP */
+	public static String GWDGURI = "http://134.76.9.66:3000";
+	public static String GWDGNetworkName = "GWDG-Cloud (968)";
+	
+	/* prefix of different types of storage  */
+	public static String OCCIStorage = "OCCIStorage";
+	public static String NFSStorage = "NFSStorage";
+	public static String CDMIStorage = "http";
+	
+	/* by adding more than one storage, use this as a separator */
+	public static String storageSeparator = "_STORAGE_";
+	
+	/* OCCI */
+	public static String compute = "/compute/";
+	public static String storage = "/storage/";
+	public static String nfsstorage = "/nfsstorage/";
+	public static String network = "/network/";
+	
     public HttpUtils()
     {
     }

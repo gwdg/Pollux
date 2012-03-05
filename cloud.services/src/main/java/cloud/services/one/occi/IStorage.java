@@ -43,7 +43,9 @@ public class IStorage extends IElement
     public static final String SUMMARY     = "summary"   ;
     public static final String FILE        = "file"      ;
     public static final String FILE_SIZE   = "size"      ;
+    public static final String EXPORT      = "export"    ;
     public static final String STATE       = "state"     ;
     public static final String CDMI_LINK   = "cdmilink"  ;
     public static final String MOUNT_POINT = "mountpoint";
+  
 }
