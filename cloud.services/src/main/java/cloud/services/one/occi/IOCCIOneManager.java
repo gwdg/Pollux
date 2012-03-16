@@ -51,6 +51,12 @@ public interface IOCCIOneManager
     public String getNetworkId(String networkName);
     public String getStorageId(String storageName);
     
+    // mock
+    public String getNetworkTransmission( String uri, String computeID);
+    public String getNetworkReactiveExtensions( String uri, String computeID);
+    public String getCPULocation( String uri, String computeID);
+    public String getMemoryLocation( String uri, String computeID);
+    
     
     public String createTemplate( ITemplate data );
     public String deleteTemplate( ITemplate data );

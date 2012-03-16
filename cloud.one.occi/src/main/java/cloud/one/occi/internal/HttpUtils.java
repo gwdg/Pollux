@@ -66,6 +66,7 @@ public class HttpUtils
 	/* prefix of different types of storage  */
 	public static String OCCIStorage = "OCCIStorage";
 	public static String NFSStorage = "NFSStorage";
+	public static String EMPTYStorage = "EMPTYStorage";
 	public static String CDMIStorage = "http";
 	
 	/* by adding more than one storage, use this as a separator */
@@ -75,6 +76,7 @@ public class HttpUtils
 	public static String compute = "/compute/";
 	public static String storage = "/storage/";
 	public static String nfsstorage = "/nfsstorage/";
+	public static String emptystorage = "/emptystorage/";
 	public static String network = "/network/";
 	
     public HttpUtils()

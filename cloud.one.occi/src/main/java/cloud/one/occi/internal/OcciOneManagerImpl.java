@@ -197,6 +197,23 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                 String URI = data.getContent().get( IStorage.URI ) + "/nfsstorage/";
                 response = HttpUtils.post( URI, headers, body );
             }
+            else if(title.equalsIgnoreCase(HttpUtils.EMPTYStorage) ){
+            	headers.put( "Accept"      , "text/occi" );
+                headers.put( "Content-Type", "text/occi" );
+                headers.put( "Category", "emptystorage;scheme=\"http://schemas.ogf.org/gwdg#\";class=\"kind\";" );
+                
+                String attr = "occi.storage.export=\"%s\","  +
+                "occi.storage.size=\"%s\"" ;
+                
+                headers.put( "X-OCCI-Attribute", String.format( attr,
+                                                                data.getContent().get( IStorage.EXPORT   ),
+                                                                data.getContent().get( IStorage.FILE_SIZE )
+                ) );
+                
+                //File[] files = new File[]{ new File( data.getContent().get( IStorage.FILE ) ) };
+                String URI = data.getContent().get( IStorage.URI ) + "/emptystorage/";
+                response = HttpUtils.post( URI, headers, body );
+            }
             else {
             	System.out.println("The storage is not created, because the storage type is not specified.");
             	return null;
@@ -293,7 +310,9 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             String cdmiStoragePattern       = "<%s>;rel=" + "\"http://schemas.ogf.org/occi/core#link\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";";
             String occiStoragePattern       = "</storage/%s>;rel=" + "\"http://schemas.ogf.org/occi/infrastructure#storage\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";";
             String nfsStoragePattern        = "</nfsstorage/%s>;rel=" + "\"http://schemas.ogf.org/gwdg#nfsstorage\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";http://schemas.ogf.org/occi/infrastructure#storagelink\";occi.storagelink.state=\"active\";occi.storagelink.mountpoint=\"%s\";occi.storagelink.deviceid=\"nfs\";";
+            String emptyStoragePattern        = "</emptystorage/%s>;rel=" + "\"http://schemas.ogf.org/gwdg#emptystorage\";category=\"http://schemas.ogf.org/occi/infrastructure#storagelink\";http://schemas.ogf.org/occi/infrastructure#storagelink\";occi.storagelink.state=\"active\";occi.storagelink.mountpoint=\"%s\";occi.storagelink.deviceid=\"empty\";";
 
+            
             StringBuffer sbNetwork = new StringBuffer(); 
             for ( int i = 0; i < networkArray.length; i++ )
             {
@@ -358,12 +377,18 @@ public class OcciOneManagerImpl implements IOCCIOneManager
 						String id = storage.getAttributes().get(IStorage.ID);
 						String mout_point = storage.getAttributes().get(IStorage.MOUNT_POINT);
 						sbStorage.append(String.format(nfsStoragePattern, id, mout_point));
+					} else if (title.equalsIgnoreCase(HttpUtils.EMPTYStorage)) { 
+						// it is a Empty-image
+						String id = storage.getAttributes().get(IStorage.ID);
+						String mout_point = storage.getAttributes().get(IStorage.MOUNT_POINT);
+						//mock
+						//sbStorage.append(String.format(emptyStoragePattern, id, mout_point));
 					}
 
 				}
-                
-                if ( i < storageArray.length-1 ) // more storages ?
-                    sbStorage.append( "," );
+                // mocked, I uncommented it for short time, if we finally support more than one storage, then this comma should be added between storages.
+                //if ( i < storageArray.length-1 ) // more storages ?
+                 //   sbStorage.append( "," );
             }
             
             StringBuffer links = new StringBuffer();
@@ -637,6 +662,50 @@ public class OcciOneManagerImpl implements IOCCIOneManager
         return result;
     }
     
+    /*
+     *
+     * get all the empty by providing URI of OCCI server
+     */
+    public IStorage[] getEmptyStorages( String uri )
+    { 
+        IStorage[] result = null;
+        try
+        {
+            Hashtable<String, String> headers = new Hashtable<String, String>();
+            headers.put( "Accept", "*/*" );
+            headers.put( "Category", "emptystorage;scheme=\"http://schemas.ogf.org/gwdg#\";class=\"kind\";" );
+            
+            String URI = uri + HttpUtils.emptystorage;
+            OcciResponse response = HttpUtils.get( URI, 
+                                                   headers );
+
+            if ( response.content != null && response.content.length > 0 && response.code != 500 )
+            {
+                result = new IStorage[ response.content.length ];
+                int i = 0;
+                for ( String s : response.content )
+                {
+                    result[ i ] = new IStorage();
+                    String storageURI = s.substring( s.indexOf( "empty" ) + 11 );
+                    result[ i ].getContent().put( IStorage.ID, storageURI        );
+                    result[ i ].getContent().put( IStorage.URI, URI + storageURI );
+                    result[ i ].getContent().put( IStorage.TITLE, HttpUtils.EMPTYStorage );
+                    System.out.println("Empty Storage :  "+ storageURI);
+                    
+                    i++;
+                }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchStorageInformation( headers, result );
+            }
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        
+        return result;
+    }
+    
     /**
 	 * Get the OCCI Storage ID with name.
 	 */
@@ -801,6 +870,13 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                         result[ i ].getAttributes().put( IStorage.ID   , id    );
                         result[ i ].getAttributes().put( IStorage.TITLE, title );
                     }
+                    else if ( Name.indexOf( HttpUtils.EMPTYStorage ) == 0 ) // Empty Storage
+                    {
+                        title = Name.substring( 0, Name.indexOf( "(" ) );
+                        id    = Name.substring( Name.indexOf( "(" )+1, Name.indexOf( ")" ) );
+                        result[ i ].getAttributes().put( IStorage.ID   , id    );
+                        result[ i ].getAttributes().put( IStorage.TITLE, title );
+                    }
                     
                 }
                 if ( Mountpoint != null )
@@ -893,6 +969,7 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             if ( response.content != null && response.content.length > 0 && response.code != 500 )
             {
             	System.out.println(response.content);
+            	return "Network Transmission Mock";
                 /*result = new INetwork[ response.content.length ];
                 int i = 0;
                 for ( String s : response.content )
@@ -913,8 +990,140 @@ public class OcciOneManagerImpl implements IOCCIOneManager
         {
             e.printStackTrace();
         }
-        
-        return null;
+        //mock
+        return "Network Transmission Mock";
+    }
+    
+    /*
+	 * get net_rx transmission value
+	 */
+    public String getNetworkReactiveExtensions( String uri, String computeID)
+    { 
+        try
+        {
+            Hashtable<String, String> headers = new Hashtable<String, String>();
+            headers.put( "Accept", "*/*" );
+            headers.put( "Category", "net_rx;scheme=\"http://example.com/occi/infrastructure/metric/compute/net_rx#\";class=\"mixin\";" );
+            
+            
+            String URI = uri + "/compute/"+computeID;
+            OcciResponse response = HttpUtils.get( URI, 
+                                                   headers );
+
+            if ( response.content != null && response.content.length > 0 && response.code != 500 )
+            {
+            	System.out.println(response.content);
+            	return "Network Reactive Extensions Mock";
+                /*result = new INetwork[ response.content.length ];
+                int i = 0;
+                for ( String s : response.content )
+                {
+                    result[ i ] = new INetwork();
+                    String networkURI = s.substring( s.indexOf( "network" ) + 8 );
+                    result[ i ].getContent().put( INetwork.ID , networkURI       );
+                    result[ i ].getContent().put( INetwork.URI, URI + networkURI );
+                    
+                    
+                    i++;
+                }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchNetworkInformation( headers, result );*/
+            }
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        //mock
+        return "Network Reactive Extensions Mock";
+    }
+    
+    /*
+	 * get cpu transmission value
+	 */
+    public String getCPULocation( String uri, String computeID)
+    { 
+        try
+        {
+            Hashtable<String, String> headers = new Hashtable<String, String>();
+            headers.put( "Accept", "*/*" );
+            headers.put( "Category", "cpu;scheme=\"http://example.com/occi/infrastructure/metric/compute/cpu#\";class=\"mixin\";" );
+            
+            
+            String URI = uri + "/compute/"+computeID;
+            OcciResponse response = HttpUtils.get( URI, 
+                                                   headers );
+
+            if ( response.content != null && response.content.length > 0 && response.code != 500 )
+            {
+            	System.out.println(response.content);
+            	return "CPU Location Mock";
+                /*result = new INetwork[ response.content.length ];
+                int i = 0;
+                for ( String s : response.content )
+                {
+                    result[ i ] = new INetwork();
+                    String networkURI = s.substring( s.indexOf( "network" ) + 8 );
+                    result[ i ].getContent().put( INetwork.ID , networkURI       );
+                    result[ i ].getContent().put( INetwork.URI, URI + networkURI );
+                    
+                    
+                    i++;
+                }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchNetworkInformation( headers, result );*/
+            }
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        //mock
+        return "CPU Location Mock";
+    }
+    
+    /*
+	 * get memory transmission value
+	 */
+    public String getMemoryLocation( String uri, String computeID)
+    { 
+        try
+        {
+            Hashtable<String, String> headers = new Hashtable<String, String>();
+            headers.put( "Accept", "*/*" );
+            headers.put( "Category", "memory;scheme=\"http://example.com/occi/infrastructure/metric/compute/memory#\";class=\"mixin\";" );
+            
+            
+            String URI = uri + "/compute/"+computeID;
+            OcciResponse response = HttpUtils.get( URI, 
+                                                   headers );
+
+            if ( response.content != null && response.content.length > 0 && response.code != 500 )
+            {
+            	System.out.println(response.content);
+            	return "Memory Location Mock";
+                /*result = new INetwork[ response.content.length ];
+                int i = 0;
+                for ( String s : response.content )
+                {
+                    result[ i ] = new INetwork();
+                    String networkURI = s.substring( s.indexOf( "network" ) + 8 );
+                    result[ i ].getContent().put( INetwork.ID , networkURI       );
+                    result[ i ].getContent().put( INetwork.URI, URI + networkURI );
+                    
+                    
+                    i++;
+                }
+                OcciExecutorCompletionService engine = new OcciExecutorCompletionService();
+                engine.fetchNetworkInformation( headers, result );*/
+            }
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+        // mock
+        return "Memory Location Mock";
     }
     
     public static void main( String[] args )
@@ -999,7 +1208,7 @@ public class OcciOneManagerImpl implements IOCCIOneManager
             
     		
     		// Storage query
-            /*IStorage[] storages = occi.getStorages( HttpUtils.GWDGURI );
+            IStorage[] storages = occi.getStorages( HttpUtils.GWDGURI );
             if ( storages != null )
                 for ( IStorage s : storages )
                 {
@@ -1010,7 +1219,7 @@ public class OcciOneManagerImpl implements IOCCIOneManager
                 System.out.println( "nix" );
             }
             
-            occi.getStorageId("OpenSUSE 11.4 Install (x86_64)");*/
+            occi.getStorageId("OpenSUSE 11.4 Install (x86_64)");
     		
     		
     		// Creating Storage (NFS)

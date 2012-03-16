@@ -775,7 +775,7 @@ public class CloudWebController
         {
             IStorage tobeDeleted = new IStorage();
             tobeDeleted.content.put( IStorage.ID, delete );
-            one.deleteStorage( tobeDeleted );
+            one.deleteStorage( tobeDeleted,"" );
         }
         
         // add a list with available STORAGEs
